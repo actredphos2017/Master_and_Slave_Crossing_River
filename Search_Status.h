@@ -19,34 +19,34 @@ struct Search_Tree{
     Search_Tree(Search_Tree* f = nullptr):father(f){}
 };
 
-struct task{
+struct singleTask{
     int price;
     int S, M, K;
     bool B;
     Search_Tree* node;
 };
 
-struct st{
+struct smallTask{
     int _s, _m;
 };
 
-struct sstatus{
+struct smallStatus{
     int s, m;
     bool b;
-    bool operator==(sstatus& ss) const;
+    bool operator==(smallStatus& ss) const;
 };
 
 class Status{
 private:
     int S, M, K;
-    list<task> tasks;
-    vector<sstatus> hash_map;
+    list<singleTask> tasks;
+    vector<smallStatus> hash_map;
     Search_Tree* stree = nullptr;
 public:
     Status(int s, int m, int k):S(s), M(m), K(k){}
-    void add_task(task, int);
-    bool inRule(st) const;
-    vector<st> stasks(task) const;
+    void add_task(singleTask, int);
+    bool inRule(smallTask) const;
+    vector<smallTask> stasks(singleTask) const;
     Search_Tree* search();
 };
 
