@@ -32,10 +32,10 @@ Search_Tree* Status::search(){
             return running_task.node;
 //        cout << endl << "Start singleTask: " << running_task.S << " " << running_task.M << " " << (boat_loc ? "Here" : "There") << endl;
         step ++;
-        vector<smallTask> _st = this->stasks(running_task);
+        vector<smallTask> _st = this->buildSmallTasks(running_task);
         boat_loc = !running_task.B;
         for(auto it : _st){
-            smallStatus ss{it._s, it._m, boat_loc};
+            smallStatus ss{it.s, it.m, boat_loc};
             bool existed = false;
             for(auto item : this->hash_map)
                 if(item == ss) {
@@ -43,13 +43,13 @@ Search_Tree* Status::search(){
                     break;
                 }
             if(!existed){
-//                cout << "Add singleTask: " << it._s << " " << it._m << " " << (boat_loc ? "Here" : "There") << endl;
+//                cout << "Add singleTask: " << it.s << " " << it.m << " " << (boat_loc ? "Here" : "There") << endl;
                 Search_Tree::count ++;
                 auto* sonNode = new Search_Tree(running_task.node);
-                sonNode->S = it._s;
-                sonNode->M = it._m;
+                sonNode->S = it.s;
+                sonNode->M = it.m;
                 sonNode->B = boat_loc;
-                singleTask new_task{-1, it._s, it._m, this->K, boat_loc, sonNode};
+                singleTask new_task{-1, it.s, it.m, this->K, boat_loc, sonNode};
                 this->add_task(new_task, step);
                 this->hash_map.push_back(ss);
             }
@@ -71,29 +71,29 @@ void Status::add_task(singleTask t, int step){
 }
 
 bool Status::inRule(smallTask t) const{
-    return ((t._m <= t._s || (t._m == 0 || t._s == 0)) && (this->M - t._m <= this->S - t._s || (this->M - t._m == 0 || this->S - t._s == 0)));
+    return ((t.m <= t.s || (t.m == 0 || t.s == 0)) && (this->M - t.m <= this->S - t.s || (this->M - t.m == 0 || this->S - t.s == 0)));
 }
 
-vector<smallTask> Status::stasks(singleTask t) const{
+vector<smallTask> Status::buildSmallTasks(singleTask t) const{
     vector<smallTask> res;
     int s = t.S,
             m = t.M;
     smallTask _t = smallTask{0, 0};
-    while(_t._s <= this->S){
-        while(_t._m <= this->M){
+    while(_t.s <= this->S){
+        while(_t.m <= this->M){
             if(t.B) {
-                if (m >= _t._m && s >= _t._s && (m - _t._m) + (s - _t._s) <= this->K && (m - _t._m) + (s - _t._s) != 0 && this->inRule(_t))
+                if (m >= _t.m && s >= _t.s && (m - _t.m) + (s - _t.s) <= this->K && (m - _t.m) + (s - _t.s) != 0 && this->inRule(_t))
                     res.push_back(_t);
             }else{
-                if (m <= _t._m && s <= _t._s && (_t._m - m) + (_t._s - s) <= this->K && (_t._m - m) + (_t._s - s) != 0 && this->inRule(_t))
+                if (m <= _t.m && s <= _t.s && (_t.m - m) + (_t.s - s) <= this->K && (_t.m - m) + (_t.s - s) != 0 && this->inRule(_t))
                     res.push_back(_t);
             }
-            _t._m ++;
+            _t.m ++;
         }
-        _t._m = 0;
-        _t._s ++;
+        _t.m = 0;
+        _t.s ++;
     }
 //    for(auto it : res)
-//        cout << "smallTask: " << it._s << " " << it._m << endl;
+//        cout << "smallTask: " << it.s << " " << it.m << endl;
     return res;
 }

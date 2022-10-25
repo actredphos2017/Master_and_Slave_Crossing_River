@@ -27,7 +27,7 @@ struct singleTask{
 };
 
 struct smallTask{
-    int _s, _m;
+    int s, m;
 };
 
 struct smallStatus{
@@ -46,7 +46,7 @@ public:
     Status(int s, int m, int k):S(s), M(m), K(k){}
     void add_task(singleTask, int);
     bool inRule(smallTask) const;
-    vector<smallTask> stasks(singleTask) const;
+    vector<smallTask> buildSmallTasks(singleTask t) const;
     Search_Tree* search();
 };
 
